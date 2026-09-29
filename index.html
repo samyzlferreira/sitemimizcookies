@@ -2,373 +2,312 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Mimi Cookies - Pedidos Online</title>
-
-
-    <!-- FONTES -->
+    <title>Mimi Cookies</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-
-    <!-- FONT AWESOME -->
-
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     >
 
-
-    <!-- CSS -->
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
-    <!-- ================================
+    <!-- =========================
          CABEÇALHO
-    ================================= -->
+    ========================== -->
 
     <header class="header">
 
-        <div class="brand">
+        <div class="header-content">
 
-            <div class="logo-box">
+            <div class="logo-area">
 
-                <img
-                    src="foto.jpg"
-                    alt="Logo Mimi Cookies"
-                >
+                <div class="logo-image">
+                    <img src="foto.jpg" alt="Mimi Cookies">
+                </div>
 
-            </div>
+                <div class="logo-text">
 
+                    <h1>Mimi Cookies</h1>
 
-            <div>
+                    <p>Feito com carinho 🍪🐰</p>
 
-                <h1>
-                    Mimi Cookies
-                </h1>
-
-                <p>
-                    Feito com carinho 🍪🐰
-                </p>
+                </div>
 
             </div>
+
+
+            <button
+                class="cart-button"
+                onclick="document.getElementById('carrinho').scrollIntoView({ behavior: 'smooth' })"
+            >
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <span>Carrinho</span>
+
+                <span id="cart-count">0</span>
+
+            </button>
 
         </div>
-
-
-        <!-- CARRINHO -->
-
-        <button
-            class="cart-button"
-            id="cart-button"
-            type="button"
-        >
-
-            <i class="fa-solid fa-cookie-bite"></i>
-
-            <span class="cart-text">
-                Carrinho
-            </span>
-
-            <span
-                id="cart-badge-count"
-                class="cart-badge"
-            >
-                0
-            </span>
-
-        </button>
 
     </header>
 
 
+    <!-- =========================
+         STATUS DE FUNCIONAMENTO
+    ========================== -->
 
-    <!-- ================================
+    <div class="status-container">
+
+        <div id="status-funcionamento" class="status-funcionamento">
+            Verificando horário...
+        </div>
+
+        <p>
+            Atendimento de segunda a sábado, das 13h às 21h.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
          CONTEÚDO PRINCIPAL
-    ================================= -->
+    ========================== -->
 
     <main class="main-container">
 
 
-        <!-- ================================
+        <!-- =========================
              CARDÁPIO
-        ================================= -->
+        ========================== -->
 
-        <section class="products-section">
-
+        <section class="menu-section">
 
             <div class="section-title">
 
-                <h2>
+                <h2>Cardápio</h2>
 
-                    <i class="fa-solid fa-store"></i>
-
-                    Cardápio
-
-                </h2>
-
-
-                <span>
-                    3 sabores disponíveis
-                </span>
+                <p>
+                    Escolha seus cookies favoritos!
+                </p>
 
             </div>
 
 
-            <!-- OS PRODUTOS SERÃO INSERIDOS PELO JS -->
-
             <div
-                class="products-grid"
-                id="products-grid"
+                id="products-container"
+                class="products-container"
             >
-
+                <!-- Os produtos são carregados pelo JavaScript -->
             </div>
 
         </section>
 
 
-
-        <!-- ================================
+        <!-- =========================
              CARRINHO
-        ================================= -->
+        ========================== -->
 
-        <aside class="cart-section">
+        <aside
+            id="carrinho"
+            class="cart-panel"
+        >
 
-            <div class="cart-panel">
+            <div class="cart-header">
 
+                <div>
 
-                <!-- ================================
-                     ETAPA 1
-                ================================= -->
+                    <h2>
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        Seu pedido
+                    </h2>
 
-                <div id="step-1-container">
+                    <p>
+                        Confira seus produtos
+                    </p>
 
+                </div>
 
-                    <!-- TÍTULO -->
-
-                    <div class="cart-title">
-
-                        <h2>
-
-                            <i class="fa-solid fa-basket-shopping"></i>
-
-                            Seu Carrinho
-
-                        </h2>
+            </div>
 
 
-                        <button
-                            id="btn-clear-cart"
-                            class="clear-button"
-                            type="button"
+            <!-- ITENS DO CARRINHO -->
+
+            <div
+                id="cart-items"
+                class="cart-items"
+            >
+                <div class="empty-cart">
+
+                    <i class="fa-solid fa-basket-shopping"></i>
+
+                    <p>
+                        Seu carrinho está vazio.
+                    </p>
+
+                </div>
+            </div>
+
+
+            <!-- RESUMO -->
+
+            <div class="cart-summary">
+
+                <div class="summary-line">
+
+                    <span>Subtotal</span>
+
+                    <strong id="cart-subtotal">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-line">
+
+                    <span>Entrega</span>
+
+                    <strong id="cart-delivery">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-line total-line">
+
+                    <span>Total</span>
+
+                    <strong id="cart-total">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 ETAPA 1
+            ========================== -->
+
+            <div
+                id="step-1"
+                class="checkout-step"
+            >
+
+                <div class="checkout-title">
+
+                    <h3>Finalizar pedido</h3>
+
+                    <p>
+                        Preencha seus dados
+                    </p>
+
+                </div>
+
+
+                <form id="checkout-form">
+
+
+                    <!-- NOME -->
+
+                    <div class="form-group">
+
+                        <label for="customer-name">
+                            Seu nome
+                        </label>
+
+                        <input
+                            type="text"
+                            id="customer-name"
+                            placeholder="Digite seu nome"
                         >
-                            Limpar
-                        </button>
 
                     </div>
 
 
+                    <!-- ENTREGA -->
 
-                    <!-- ITENS DO CARRINHO -->
+                    <div class="form-group">
+
+                        <label for="delivery-option">
+                            Como deseja receber?
+                        </label>
+
+                        <select id="delivery-option">
+
+                            <option
+                                value=""
+                                selected
+                                disabled
+                            >
+                                Escolha uma opção
+                            </option>
+
+                            <option value="entrega">
+                                🚚 Entrega em Domicílio (+ R$ 8,00)
+                            </option>
+
+                            <option value="retirada">
+                                🏪 Retirar na Loja (Grátis)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ENDEREÇO -->
 
                     <div
-                        id="cart-items-list"
-                        class="cart-items-list"
+                        id="address-wrapper"
+                        class="form-group"
+                        style="display: none;"
                     >
 
-                        <div class="empty-cart">
+                        <label for="address">
+                            Endereço para entrega
+                        </label>
 
-                            <i class="fa-solid fa-cookie"></i>
-
-                            <p>
-                                Seu carrinho está vazio.
-                            </p>
-
-                            <span>
-                                Adicione alguns cookies gostosos!
-                            </span>
-
-                        </div>
+                        <textarea
+                            id="address"
+                            rows="3"
+                            placeholder="Digite seu endereço completo"
+                        ></textarea>
 
                     </div>
 
 
+                    <!-- LOCAL DE RETIRADA -->
 
-                    <!-- ================================
-                         RESUMO
-                    ================================= -->
+                    <div
+                        id="pickup-info"
+                        class="pickup-info"
+                    >
 
-                    <div class="summary">
-
-
-                        <div>
-
-                            <span>
-                                Subtotal:
-                            </span>
-
-                            <strong id="summary-subtotal">
-                                R$ 0,00
-                            </strong>
-
-                        </div>
-
+                        <i class="fa-solid fa-store"></i>
 
                         <div>
-
-                            <span>
-                                Taxa de Entrega:
-                            </span>
-
-                            <strong
-                                id="summary-delivery"
-                                class="delivery-price"
-                            >
-                                —
-                            </strong>
-
-                        </div>
-
-
-                        <div class="summary-total">
-
-                            <span>
-                                Total:
-                            </span>
-
-                            <strong id="summary-total">
-                                R$ 0,00
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <!-- ================================
-                         FORMULÁRIO
-                    ================================= -->
-
-                    <form id="checkout-form">
-
-
-                        <!-- NOME -->
-
-                        <div class="form-group">
-
-                            <label for="client-name">
-                                Seu Nome *
-                            </label>
-
-                            <input
-                                type="text"
-                                id="client-name"
-                                placeholder="Ex: Maria Oliveira"
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- FORMA DE ENVIO -->
-
-                        <div class="form-group">
-
-                            <label for="delivery-option">
-                                Forma de Envio *
-                            </label>
-
-                            <select
-                                id="delivery-option"
-                                required
-                            >
-
-                                <option
-                                    value=""
-                                    selected
-                                    disabled
-                                >
-                                    Escolha uma opção
-                                </option>
-
-                                <option value="entrega">
-                                    🚚 Entrega em Domicílio (+ R$ 8,00)
-                                </option>
-
-                                <option value="retirada">
-                                    🏪 Retirar na Loja (Grátis)
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-
-                        <!-- ================================
-                             ENDEREÇO
-                        ================================= -->
-
-                        <div
-                            id="address-field-wrapper"
-                            class="form-group"
-                            style="display: none;"
-                        >
-
-                            <label for="client-address">
-                                Endereço Completo *
-                            </label>
-
-                            <input
-                                type="text"
-                                id="client-address"
-                                placeholder="Rua, Nº, Bairro e Ponto de Ref."
-                            >
-
-                        </div>
-
-
-
-                        <!-- ================================
-                             LOCAL DE RETIRADA
-                        ================================= -->
-
-                        <div
-                            id="pickup-info"
-                            class="pickup-info"
-                        >
 
                             <strong>
-                                📍 Local de retirada
+                                Local de retirada
                             </strong>
 
                             <p>
@@ -377,232 +316,174 @@
 
                         </div>
 
-
-
-                        <!-- ================================
-                             PAGAMENTO
-                        ================================= -->
-
-                        <div class="form-group">
-
-                            <label for="payment-method">
-                                Forma de Pagamento *
-                            </label>
-
-                            <select
-                                id="payment-method"
-                                required
-                            >
-
-                                <option
-                                    value=""
-                                    selected
-                                    disabled
-                                >
-                                    Escolha uma opção
-                                </option>
-
-                                <option value="Pix">
-                                    ⚡ Pix
-                                </option>
-
-                                <option value="Dinheiro">
-                                    💵 Dinheiro
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-
-                        <!-- ================================
-                             TROCO
-                        ================================= -->
-
-                        <div
-                            id="cash-change-wrapper"
-                            class="cash-change"
-                        >
-
-                            <label for="cash-given">
-                                Precisa de troco para quanto?
-                            </label>
-
-
-                            <div class="cash-input">
-
-                                <span>
-                                    R$
-                                </span>
-
-                                <input
-                                    type="number"
-                                    id="cash-given"
-                                    placeholder="Ex: 50,00"
-                                    min="0"
-                                    step="0.01"
-                                >
-
-                            </div>
-
-
-                            <p id="change-preview-text"></p>
-
-                        </div>
-
-
-
-                        <!-- ================================
-                             BOTÃO
-                        ================================= -->
-
-                        <button
-                            type="submit"
-                            class="continue-button"
-                        >
-
-                            <span>
-                                Avançar para Pagamento
-                            </span>
-
-                            <i class="fa-solid fa-arrow-right"></i>
-
-                        </button>
-
-                    </form>
-
-                </div>
-
-
-
-                <!-- ================================
-                     ETAPA 2
-                ================================= -->
-
-                <div
-                    id="step-2-container"
-                    class="payment-step"
-                >
-
-
-                    <!-- TÍTULO -->
-
-                    <div class="payment-title">
-
-                        <h2>
-
-                            <i class="fa-solid fa-credit-card"></i>
-
-                            Pagamento
-
-                        </h2>
-
-                        <span>
-                            Etapa 2/2
-                        </span>
-
                     </div>
-
-
-
-                    <!-- RESUMO DO PEDIDO -->
-
-                    <div class="order-summary">
-
-
-                        <p>
-
-                            <strong>
-                                Cliente:
-                            </strong>
-
-                            <span id="summary-client-name">
-                                -
-                            </span>
-
-                        </p>
-
-
-                        <p>
-
-                            <strong>
-                                Envio:
-                            </strong>
-
-                            <span id="summary-delivery-type">
-                                -
-                            </span>
-
-                        </p>
-
-
-                        <p id="summary-address-line">
-
-                            <strong>
-                                Endereço:
-                            </strong>
-
-                            <span id="summary-address-val">
-                                -
-                            </span>
-
-                        </p>
-
-
-                        <p class="final-total">
-
-                            Total do Pedido:
-
-                            <strong id="summary-final-total">
-                                R$ 0,00
-                            </strong>
-
-                        </p>
-
-                    </div>
-
 
 
                     <!-- PAGAMENTO -->
 
-                    <div id="payment-box-content">
+                    <div class="form-group">
+
+                        <label for="payment-option">
+                            Forma de pagamento
+                        </label>
+
+                        <select id="payment-option">
+
+                            <option
+                                value=""
+                                selected
+                                disabled
+                            >
+                                Escolha uma opção
+                            </option>
+
+                            <option value="pix">
+                                Pix
+                            </option>
+
+                            <option value="dinheiro">
+                                Dinheiro
+                            </option>
+
+                        </select>
 
                     </div>
 
 
+                    <!-- TROCO -->
 
-                    <!-- WHATSAPP -->
-
-                    <button
-                        id="whatsapp-button"
-                        class="whatsapp-button"
-                        type="button"
+                    <div
+                        id="change-wrapper"
+                        class="form-group"
+                        style="display: none;"
                     >
 
-                        <i class="fa-brands fa-whatsapp"></i>
+                        <label for="change">
+                            Precisa de troco para quanto?
+                        </label>
 
-                        Enviar Pedido no WhatsApp
+                        <input
+                            type="number"
+                            id="change"
+                            min="0"
+                            step="0.01"
+                            placeholder="Ex.: 50,00"
+                        >
+
+                    </div>
+
+
+                    <!-- BOTÃO -->
+
+                    <button
+                        type="submit"
+                        class="checkout-button"
+                    >
+
+                        Avançar para Pagamento
+
+                        <i class="fa-solid fa-arrow-right"></i>
 
                     </button>
 
+                </form>
+
+            </div>
 
 
-                    <!-- VOLTAR -->
+            <!-- =========================
+                 ETAPA 2
+            ========================== -->
 
-                    <button
-                        id="back-button"
-                        class="back-button"
-                        type="button"
-                    >
+            <div
+                id="step-2"
+                class="checkout-step"
+                style="display: none;"
+            >
 
-                        <i class="fa-solid fa-chevron-left"></i>
+                <div class="checkout-title">
 
-                        Voltar e alterar dados do pedido
+                    <h3>Pagamento</h3>
 
-                    </button>
+                    <p>
+                        Confira seu pedido
+                    </p>
 
                 </div>
+
+
+                <!-- RESUMO DO PEDIDO -->
+
+                <div
+                    id="order-summary"
+                    class="order-summary"
+                >
+                </div>
+
+
+                <!-- PIX -->
+
+                <div
+                    id="pix-info"
+                    class="payment-info pix-info"
+                    style="display: none;"
+                >
+                </div>
+
+
+                <!-- DINHEIRO -->
+
+                <div
+                    id="cash-info"
+                    class="payment-info cash-info"
+                    style="display: none;"
+                >
+                </div>
+
+
+                <!-- TOTAL FINAL -->
+
+                <div class="final-total">
+
+                    <span>
+                        Total do pedido
+                    </span>
+
+                    <strong id="final-total">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+
+                <!-- WHATSAPP -->
+
+                <button
+                    type="button"
+                    id="whatsapp-button"
+                    class="whatsapp-button"
+                >
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    Enviar pedido pelo WhatsApp
+
+                </button>
+
+
+                <!-- VOLTAR -->
+
+                <button
+                    type="button"
+                    id="back-button"
+                    class="back-button"
+                >
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Voltar
+
+                </button>
 
             </div>
 
@@ -611,60 +492,37 @@
     </main>
 
 
-
-    <!-- ================================
+    <!-- =========================
          RODAPÉ
-    ================================= -->
+    ========================== -->
 
     <footer class="footer">
 
-        <p>
+        <div class="footer-content">
 
-            <strong>
-                Mimi Cookies 🍪
-            </strong>
+            <h3>Mimi Cookies</h3>
 
-            - Delícias Artesanais
+            <p>
+                Feito com carinho para deixar seu dia mais doce. 🍪
+            </p>
 
-        </p>
+            <div class="footer-pix">
 
+                <strong>Chave Pix:</strong>
 
-        <p>
+                <span>
+                    samyraleitedasilvaferreira09@gmail.com
+                </span>
 
-            Chave Pix:
+            </div>
 
-            <span>
-                samyraleitedasilvaferreira09@gmail.com
-            </span>
+            <p class="copyright">
+                © 2026 Mimi Cookies. Todos os direitos reservados.
+            </p>
 
-        </p>
-
-
-        <p>
-            © 2026 Mimi Cookies. Todos os direitos reservados.
-        </p>
+        </div>
 
     </footer>
-
-
-
-    <!-- ================================
-         NOTIFICAÇÃO
-    ================================= -->
-
-    <div
-        id="toast"
-        class="toast"
-    >
-
-        <i class="fa-solid fa-circle-check"></i>
-
-        <span id="toast-message">
-            Notificação
-        </span>
-
-    </div>
-
 
 
     <!-- JAVASCRIPT -->

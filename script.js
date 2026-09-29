@@ -2,154 +2,137 @@ const WHATSAPP_NUMBER = "5519998470825";
 const PIX_KEY = "samyraleitedasilvaferreira09@gmail.com";
 const DELIVERY_FEE = 8.00;
 
-
-/* ================================
-   PRODUTOS
-================================ */
+// ===============================
+// PRODUTOS
+// ===============================
 
 const products = [
     {
         id: 1,
         name: "Cookie Tradicional Gotas",
-        description: "Massa amanteigada com gotas de chocolate.",
         price: 13.00,
-        tag: "Clássico",
+        description: "Massa amanteigada com gotas de chocolate.",
         icon: "fa-cookie-bite"
     },
-
     {
         id: 2,
         name: "Cookie Nutella",
-        description: "Recheado com muita Nutella pura.",
         price: 16.00,
-        tag: "Recheado",
-        icon: "fa-heart"
+        description: "Recheado com muita Nutella pura.",
+        icon: "fa-cookie"
     },
-
     {
         id: 3,
         name: "Cookie Kinder Bueno",
-        description: "Recheado com muito creme de Kinder Bueno.",
         price: 16.00,
-        tag: "Especial",
-        icon: "fa-star"
+        description: "Recheado com muito creme de Kinder Bueno.",
+        icon: "fa-cookie-bite"
     }
 ];
 
+// ===============================
+// CARRINHO
+// ===============================
 
 let cart = [];
 
-let customerData = {
-    name: "",
-    delivery: "",
-    address: "",
-    payment: "",
-    cashGiven: 0
-};
 
+// ===============================
+// HORÁRIO DE FUNCIONAMENTO
+// Segunda a sábado: 13h às 21h
+// Domingo: fechado
+// ===============================
 
-/* ================================
-   ELEMENTOS
-================================ */
+function verificarHorario() {
+    const agora = new Date();
 
-const productsGrid = document.getElementById("products-grid");
-const cartItemsList = document.getElementById("cart-items-list");
-const cartBadge = document.getElementById("cart-badge-count");
+    const dia = agora.getDay();
+    const hora = agora.getHours();
 
-const subtotalElement = document.getElementById("summary-subtotal");
-const deliveryElement = document.getElementById("summary-delivery");
-const totalElement = document.getElementById("summary-total");
+    // 0 = domingo
+    // 1 = segunda
+    // 2 = terça
+    // 3 = quarta
+    // 4 = quinta
+    // 5 = sexta
+    // 6 = sábado
 
-const checkoutForm = document.getElementById("checkout-form");
-
-const deliveryOption = document.getElementById("delivery-option");
-const addressFieldWrapper = document.getElementById("address-field-wrapper");
-const addressInput = document.getElementById("client-address");
-const pickupInfo = document.getElementById("pickup-info");
-
-const paymentMethod = document.getElementById("payment-method");
-const cashChangeWrapper = document.getElementById("cash-change-wrapper");
-const cashGivenInput = document.getElementById("cash-given");
-const changePreview = document.getElementById("change-preview-text");
-
-const step1Container = document.getElementById("step-1-container");
-const step2Container = document.getElementById("step-2-container");
-
-const paymentBoxContent = document.getElementById("payment-box-content");
-
-const summaryClientName = document.getElementById("summary-client-name");
-const summaryDeliveryType = document.getElementById("summary-delivery-type");
-const summaryAddressLine = document.getElementById("summary-address-line");
-const summaryAddressValue = document.getElementById("summary-address-val");
-const summaryFinalTotal = document.getElementById("summary-final-total");
-
-const whatsappButton = document.getElementById("whatsapp-button");
-const backButton = document.getElementById("back-button");
-const clearCartButton = document.getElementById("btn-clear-cart");
-const cartButton = document.getElementById("cart-button");
-
-const toast = document.getElementById("toast");
-const toastMessage = document.getElementById("toast-message");
-
-
-/* ================================
-   FORMATAÇÃO
-================================ */
-
-function formatPrice(value) {
-    return value.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
+    return dia >= 1 && dia <= 6 && hora >= 13 && hora < 21;
 }
 
 
-/* ================================
-   MOSTRAR PRODUTOS
-================================ */
+// ===============================
+// ELEMENTOS
+// ===============================
+
+const productsContainer = document.getElementById("products-container");
+const cartItems = document.getElementById("cart-items");
+const cartCount = document.getElementById("cart-count");
+const cartSubtotal = document.getElementById("cart-subtotal");
+const cartDelivery = document.getElementById("cart-delivery");
+const cartTotal = document.getElementById("cart-total");
+
+const deliveryOption = document.getElementById("delivery-option");
+const addressWrapper = document.getElementById("address-wrapper");
+const addressInput = document.getElementById("address");
+
+const paymentOption = document.getElementById("payment-option");
+const changeWrapper = document.getElementById("change-wrapper");
+const changeInput = document.getElementById("change");
+
+const checkoutForm = document.getElementById("checkout-form");
+const customerName = document.getElementById("customer-name");
+
+const step1 = document.getElementById("step-1");
+const step2 = document.getElementById("step-2");
+
+const orderSummary = document.getElementById("order-summary");
+const pixInfo = document.getElementById("pix-info");
+const cashInfo = document.getElementById("cash-info");
+
+const finalTotal = document.getElementById("final-total");
+
+const copyPixButton = document.getElementById("copy-pix");
+
+
+// ===============================
+// MOSTRAR PRODUTOS
+// ===============================
 
 function renderProducts() {
 
-    productsGrid.innerHTML = "";
+    if (!productsContainer) {
+        return;
+    }
 
-    products.forEach(function(product) {
+    productsContainer.innerHTML = "";
 
-        const card = document.createElement("article");
+    products.forEach(product => {
+
+        const card = document.createElement("div");
 
         card.className = "product-card";
 
         card.innerHTML = `
-            <div class="product-image">
-
-                <span class="product-tag">
-                    ${product.tag}
-                </span>
-
-                <i class="fa-solid ${product.icon} product-icon"></i>
-
+            <div class="product-icon">
+                <i class="fa-solid ${product.icon}"></i>
             </div>
 
             <div class="product-info">
 
-                <h3>
-                    ${product.name}
-                </h3>
+                <h3>${product.name}</h3>
 
-                <p class="product-description">
-                    ${product.description}
-                </p>
+                <p>${product.description}</p>
 
                 <div class="product-bottom">
 
-                    <span class="product-price">
-                        ${formatPrice(product.price)}
-                    </span>
+                    <strong>R$ ${product.price.toFixed(2).replace(".", ",")}</strong>
 
-                    <button
-                        class="add-product-button"
+                    <button 
+                        class="add-button"
                         onclick="addToCart(${product.id})"
                     >
-                        <i class="fa-solid fa-plus"></i>
+                        Adicionar
                     </button>
 
                 </div>
@@ -157,214 +140,203 @@ function renderProducts() {
             </div>
         `;
 
-        productsGrid.appendChild(card);
-
+        productsContainer.appendChild(card);
     });
 }
 
 
-/* ================================
-   ADICIONAR AO CARRINHO
-================================ */
+// ===============================
+// ADICIONAR AO CARRINHO
+// ===============================
 
 function addToCart(productId) {
 
-    const product = products.find(function(item) {
-        return item.id === productId;
-    });
-
-    if (!product) return;
-
-    const existingItem = cart.find(function(item) {
-        return item.id === productId;
-    });
-
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.push({
-            id: product.id,
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            tag: product.tag,
-            icon: product.icon,
-            quantity: 1
-        });
-    }
-
-    renderCart();
-
-    showToast(product.name + " adicionado ao carrinho!");
-}
-
-
-/* ================================
-   ALTERAR QUANTIDADE
-================================ */
-
-function changeQuantity(productId, change) {
-
-    const item = cart.find(function(product) {
-        return product.id === productId;
-    });
-
-    if (!item) return;
-
-    item.quantity += change;
-
-    if (item.quantity <= 0) {
-        cart = cart.filter(function(product) {
-            return product.id !== productId;
-        });
-    }
-
-    renderCart();
-}
-
-
-/* ================================
-   MOSTRAR CARRINHO
-================================ */
-
-function renderCart() {
-
-    cartItemsList.innerHTML = "";
-
-    if (cart.length === 0) {
-
-        cartItemsList.innerHTML = `
-            <div class="empty-cart">
-
-                <i class="fa-solid fa-cookie"></i>
-
-                <p>
-                    Seu carrinho está vazio.
-                </p>
-
-                <span>
-                    Adicione alguns cookies gostosos!
-                </span>
-
-            </div>
-        `;
-
-        cartBadge.textContent = "0";
-
-        updateSummary();
+    if (!verificarHorario()) {
+        alert(
+            "Estamos fechados no momento! 🍪\n\n" +
+            "Nosso horário de atendimento é de segunda a sábado, das 13h às 21h."
+        );
 
         return;
     }
 
+    const product = products.find(item => item.id === productId);
 
-    cart.forEach(function(item) {
+    if (!product) {
+        return;
+    }
 
-        const cartItem = document.createElement("div");
+    const existingProduct = cart.find(item => item.id === productId);
 
-        cartItem.className = "cart-item";
+    if (existingProduct) {
 
-        cartItem.innerHTML = `
-            <div class="cart-item-image">
-                <i class="fa-solid ${item.icon}"></i>
-            </div>
+        existingProduct.quantity++;
 
-            <div class="cart-item-info">
+    } else {
 
-                <h4>
-                    ${item.name}
-                </h4>
+        cart.push({
+            ...product,
+            quantity: 1
+        });
 
-                <span class="cart-item-price">
-                    ${formatPrice(item.price)}
-                </span>
+    }
 
-            </div>
-
-            <div class="quantity-control">
-
-                <button
-                    class="quantity-button"
-                    onclick="changeQuantity(${item.id}, -1)"
-                >
-                    <i class="fa-solid fa-minus"></i>
-                </button>
-
-                <span class="quantity-value">
-                    ${item.quantity}
-                </span>
-
-                <button
-                    class="quantity-button"
-                    onclick="changeQuantity(${item.id}, 1)"
-                >
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-
-            </div>
-        `;
-
-        cartItemsList.appendChild(cartItem);
-
-    });
-
-    updateCartBadge();
+    renderCart();
     updateSummary();
 }
 
 
-/* ================================
-   BADGE DO CARRINHO
-================================ */
+// ===============================
+// DIMINUIR QUANTIDADE
+// ===============================
 
-function updateCartBadge() {
+function decreaseQuantity(productId) {
 
-    let totalItems = 0;
+    const product = cart.find(item => item.id === productId);
 
-    cart.forEach(function(item) {
-        totalItems += item.quantity;
-    });
+    if (!product) {
+        return;
+    }
 
-    cartBadge.textContent = totalItems;
+    product.quantity--;
+
+    if (product.quantity <= 0) {
+
+        cart = cart.filter(item => item.id !== productId);
+
+    }
+
+    renderCart();
+    updateSummary();
 }
 
 
-/* ================================
-   SUBTOTAL
-================================ */
+// ===============================
+// AUMENTAR QUANTIDADE
+// ===============================
+
+function increaseQuantity(productId) {
+
+    if (!verificarHorario()) {
+        alert(
+            "Estamos fechados no momento! 🍪\n\n" +
+            "Nosso horário de atendimento é de segunda a sábado, das 13h às 21h."
+        );
+
+        return;
+    }
+
+    const product = cart.find(item => item.id === productId);
+
+    if (!product) {
+        return;
+    }
+
+    product.quantity++;
+
+    renderCart();
+    updateSummary();
+}
+
+
+// ===============================
+// RENDERIZAR CARRINHO
+// ===============================
+
+function renderCart() {
+
+    if (!cartItems) {
+        return;
+    }
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+            <div class="empty-cart">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <p>Seu carrinho está vazio.</p>
+            </div>
+        `;
+
+    } else {
+
+        cart.forEach(product => {
+
+            const item = document.createElement("div");
+
+            item.className = "cart-item";
+
+            item.innerHTML = `
+                <div class="cart-item-info">
+
+                    <strong>${product.name}</strong>
+
+                    <span>
+                        R$ ${product.price.toFixed(2).replace(".", ",")}
+                    </span>
+
+                </div>
+
+                <div class="quantity-controls">
+
+                    <button onclick="decreaseQuantity(${product.id})">
+                        -
+                    </button>
+
+                    <span>${product.quantity}</span>
+
+                    <button onclick="increaseQuantity(${product.id})">
+                        +
+                    </button>
+
+                </div>
+            `;
+
+            cartItems.appendChild(item);
+        });
+    }
+
+    updateCartCount();
+}
+
+
+// ===============================
+// CONTADOR DO CARRINHO
+// ===============================
+
+function updateCartCount() {
+
+    if (!cartCount) {
+        return;
+    }
+
+    const totalItems = cart.reduce(
+        (total, item) => total + item.quantity,
+        0
+    );
+
+    cartCount.textContent = totalItems;
+}
+
+
+// ===============================
+// SUBTOTAL
+// ===============================
 
 function calculateSubtotal() {
 
-    let subtotal = 0;
-
-    cart.forEach(function(item) {
-        subtotal += item.price * item.quantity;
-    });
-
-    return subtotal;
+    return cart.reduce(
+        (total, item) => total + (item.price * item.quantity),
+        0
+    );
 }
 
 
-/* ================================
-   TOTAL
-================================ */
-
-function calculateTotal() {
-
-    const subtotal = calculateSubtotal();
-
-    let delivery = 0;
-
-    if (deliveryOption.value === "entrega") {
-        delivery = DELIVERY_FEE;
-    }
-
-    return subtotal + delivery;
-}
-
-
-/* ================================
-   ATUALIZAR VALORES
-================================ */
+// ===============================
+// ATUALIZAR RESUMO
+// ===============================
 
 function updateSummary() {
 
@@ -372,593 +344,572 @@ function updateSummary() {
 
     let delivery = 0;
 
-    if (deliveryOption.value === "entrega") {
+    if (deliveryOption) {
+
+        if (deliveryOption.value === "entrega") {
+
+            delivery = DELIVERY_FEE;
+
+            if (cartDelivery) {
+                cartDelivery.textContent =
+                    `R$ ${DELIVERY_FEE.toFixed(2).replace(".", ",")}`;
+            }
+
+        } else if (deliveryOption.value === "retirada") {
+
+            delivery = 0;
+
+            if (cartDelivery) {
+                cartDelivery.textContent = "Grátis";
+            }
+
+        } else {
+
+            if (cartDelivery) {
+                cartDelivery.textContent = "—";
+            }
+        }
+    }
+
+    const total = subtotal + delivery;
+
+    if (cartSubtotal) {
+        cartSubtotal.textContent =
+            `R$ ${subtotal.toFixed(2).replace(".", ",")}`;
+    }
+
+    if (cartTotal) {
+        cartTotal.textContent =
+            `R$ ${total.toFixed(2).replace(".", ",")}`;
+    }
+
+    if (finalTotal) {
+        finalTotal.textContent =
+            `R$ ${total.toFixed(2).replace(".", ",")}`;
+    }
+}
+
+
+// ===============================
+// ENTREGA / RETIRADA
+// ===============================
+
+if (deliveryOption) {
+
+    deliveryOption.addEventListener("change", function () {
+
+        if (this.value === "entrega") {
+
+            if (addressWrapper) {
+                addressWrapper.style.display = "block";
+            }
+
+        } else {
+
+            if (addressWrapper) {
+                addressWrapper.style.display = "none";
+            }
+
+            if (addressInput) {
+                addressInput.value = "";
+            }
+        }
+
+        updateSummary();
+    });
+}
+
+
+// ===============================
+// PAGAMENTO
+// ===============================
+
+if (paymentOption) {
+
+    paymentOption.addEventListener("change", function () {
+
+        if (this.value === "dinheiro") {
+
+            if (changeWrapper) {
+                changeWrapper.style.display = "block";
+            }
+
+        } else {
+
+            if (changeWrapper) {
+                changeWrapper.style.display = "none";
+            }
+
+            if (changeInput) {
+                changeInput.value = "";
+            }
+        }
+    });
+}
+
+
+// ===============================
+// AVANÇAR PARA PAGAMENTO
+// ===============================
+
+if (checkoutForm) {
+
+    checkoutForm.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        // Verifica horário
+        if (!verificarHorario()) {
+
+            alert(
+                "Estamos fechados no momento! 🍪\n\n" +
+                "Nosso horário de atendimento é de segunda a sábado, das 13h às 21h."
+            );
+
+            return;
+        }
+
+        // Verifica carrinho
+        if (cart.length === 0) {
+
+            alert("Adicione pelo menos um produto ao carrinho.");
+
+            return;
+        }
+
+        // Verifica nome
+        if (!customerName || customerName.value.trim() === "") {
+
+            alert("Digite seu nome.");
+
+            return;
+        }
+
+        // Verifica entrega
+        if (!deliveryOption || deliveryOption.value === "") {
+
+            alert("Escolha entre Entrega ou Retirada.");
+
+            return;
+        }
+
+        // Verifica endereço
+        if (
+            deliveryOption.value === "entrega" &&
+            (!addressInput || addressInput.value.trim() === "")
+        ) {
+
+            alert("Digite seu endereço para a entrega.");
+
+            return;
+        }
+
+        // Verifica pagamento
+        if (!paymentOption || paymentOption.value === "") {
+
+            alert("Escolha uma forma de pagamento.");
+
+            return;
+        }
+
+        // Verifica troco
+        if (
+            paymentOption.value === "dinheiro" &&
+            (!changeInput || changeInput.value.trim() === "")
+        ) {
+
+            alert("Informe para quanto precisa de troco.");
+
+            return;
+        }
+
+        gerarResumoPedido();
+
+        if (step1) {
+            step1.style.display = "none";
+        }
+
+        if (step2) {
+            step2.style.display = "block";
+        }
+
+        // Rola para o início do pagamento
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+}
+
+
+// ===============================
+// GERAR RESUMO DO PEDIDO
+// ===============================
+
+function gerarResumoPedido() {
+
+    if (!orderSummary) {
+        return;
+    }
+
+    orderSummary.innerHTML = "";
+
+    cart.forEach(product => {
+
+        const item = document.createElement("div");
+
+        item.className = "summary-item";
+
+        const itemTotal = product.price * product.quantity;
+
+        item.innerHTML = `
+            <span>
+                ${product.quantity}x ${product.name}
+            </span>
+
+            <strong>
+                R$ ${itemTotal.toFixed(2).replace(".", ",")}
+            </strong>
+        `;
+
+        orderSummary.appendChild(item);
+    });
+
+    const subtotal = calculateSubtotal();
+
+    let delivery = 0;
+
+    if (deliveryOption && deliveryOption.value === "entrega") {
         delivery = DELIVERY_FEE;
     }
 
     const total = subtotal + delivery;
 
-    subtotalElement.textContent = formatPrice(subtotal);
+    const deliveryText =
+        deliveryOption && deliveryOption.value === "entrega"
+            ? `R$ ${DELIVERY_FEE.toFixed(2).replace(".", ",")}`
+            : "Grátis";
 
+    const details = document.createElement("div");
 
-    if (deliveryOption.value === "") {
+    details.className = "summary-total";
 
-        deliveryElement.textContent = "—";
+    details.innerHTML = `
+        <div>
+            <span>Subtotal</span>
+            <strong>
+                R$ ${subtotal.toFixed(2).replace(".", ",")}
+            </strong>
+        </div>
 
-    } else if (deliveryOption.value === "retirada") {
+        <div>
+            <span>Entrega</span>
+            <strong>${deliveryText}</strong>
+        </div>
 
-        deliveryElement.textContent = "Grátis";
+        <div class="total-final">
+            <span>Total</span>
+            <strong>
+                R$ ${total.toFixed(2).replace(".", ",")}
+            </strong>
+        </div>
+    `;
 
-    } else {
+    orderSummary.appendChild(details);
 
-        deliveryElement.textContent = formatPrice(DELIVERY_FEE);
 
-    }
+    // ===============================
+    // PAGAMENTO PIX
+    // ===============================
 
+    if (paymentOption && paymentOption.value === "pix") {
 
-    totalElement.textContent = formatPrice(total);
+        if (pixInfo) {
 
-    updateChangePreview();
-}
+            pixInfo.style.display = "block";
 
-
-/* ================================
-   ENTREGA / RETIRADA
-================================ */
-
-deliveryOption.addEventListener("change", function() {
-
-    if (this.value === "entrega") {
-
-        addressFieldWrapper.style.display = "block";
-
-        addressInput.required = true;
-
-        pickupInfo.style.display = "none";
-
-    } else if (this.value === "retirada") {
-
-        addressFieldWrapper.style.display = "none";
-
-        addressInput.required = false;
-
-        pickupInfo.style.display = "block";
-
-    } else {
-
-        addressFieldWrapper.style.display = "none";
-
-        addressInput.required = false;
-
-        pickupInfo.style.display = "none";
-
-    }
-
-    updateSummary();
-});
-
-
-/* ================================
-   PAGAMENTO
-================================ */
-
-paymentMethod.addEventListener("change", function() {
-
-    if (this.value === "Dinheiro") {
-
-        cashChangeWrapper.style.display = "block";
-
-    } else {
-
-        cashChangeWrapper.style.display = "none";
-
-        cashGivenInput.value = "";
-
-        changePreview.textContent = "";
-    }
-});
-
-
-/* ================================
-   TROCO
-================================ */
-
-cashGivenInput.addEventListener("input", updateChangePreview);
-
-
-function updateChangePreview() {
-
-    if (paymentMethod.value !== "Dinheiro") {
-        return;
-    }
-
-    const amountGiven = Number(cashGivenInput.value);
-
-    const total = calculateTotal();
-
-    if (!amountGiven) {
-
-        changePreview.textContent = "";
-
-        return;
-    }
-
-    if (amountGiven < total) {
-
-        changePreview.style.color = "#c25b5b";
-
-        changePreview.textContent =
-            "O valor informado é menor que o total.";
-
-        return;
-    }
-
-    const change = amountGiven - total;
-
-    changePreview.style.color = "#5b8c5a";
-
-    changePreview.textContent =
-        "Troco: " + formatPrice(change);
-}
-
-
-/* ================================
-   LIMPAR CARRINHO
-================================ */
-
-clearCartButton.addEventListener("click", function() {
-
-    cart = [];
-
-    renderCart();
-
-    showToast("Carrinho limpo!");
-
-});
-
-
-/* ================================
-   AVANÇAR PARA PAGAMENTO
-================================ */
-
-checkoutForm.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-
-    if (cart.length === 0) {
-
-        showToast("Adicione pelo menos um cookie ao carrinho.");
-
-        return;
-    }
-
-
-    const name =
-        document.getElementById("client-name").value.trim();
-
-
-    const delivery =
-        deliveryOption.value;
-
-
-    const address =
-        addressInput.value.trim();
-
-
-    const payment =
-        paymentMethod.value;
-
-
-    const cashGiven =
-        Number(cashGivenInput.value);
-
-
-    if (!name) {
-
-        showToast("Digite seu nome.");
-
-        return;
-    }
-
-
-    if (!delivery) {
-
-        showToast("Escolha a forma de envio.");
-
-        return;
-    }
-
-
-    if (delivery === "entrega" && !address) {
-
-        showToast("Digite o endereço para entrega.");
-
-        return;
-    }
-
-
-    if (!payment) {
-
-        showToast("Escolha a forma de pagamento.");
-
-        return;
-    }
-
-
-    if (payment === "Dinheiro" && !cashGiven) {
-
-        showToast("Informe o valor em dinheiro.");
-
-        return;
-    }
-
-
-    if (
-        payment === "Dinheiro" &&
-        cashGiven < calculateTotal()
-    ) {
-
-        showToast("O valor informado é menor que o total.");
-
-        return;
-    }
-
-
-    customerData = {
-        name: name,
-        delivery: delivery,
-        address: address,
-        payment: payment,
-        cashGiven: cashGiven
-    };
-
-
-    showPaymentStep();
-
-});
-
-
-/* ================================
-   ETAPA DE PAGAMENTO
-================================ */
-
-function showPaymentStep() {
-
-    step1Container.style.display = "none";
-
-    step2Container.style.display = "block";
-
-
-    summaryClientName.textContent =
-        customerData.name;
-
-
-    if (customerData.delivery === "entrega") {
-
-        summaryDeliveryType.textContent =
-            "Entrega (+ R$ 8,00)";
-
-        summaryAddressLine.style.display = "flex";
-
-        summaryAddressValue.textContent =
-            customerData.address;
-
-    } else {
-
-        summaryDeliveryType.textContent =
-            "Retirada";
-
-        summaryAddressLine.style.display = "flex";
-
-        summaryAddressValue.textContent =
-            "Rua Rio Tibre, nº 48, Jardim Figueira";
-    }
-
-
-    summaryFinalTotal.textContent =
-        formatPrice(calculateTotal());
-
-
-    renderPaymentBox();
-
-    document.querySelector(".cart-section").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-}
-
-
-/* ================================
-   PAGAMENTO PIX / DINHEIRO
-================================ */
-
-function renderPaymentBox() {
-
-    if (customerData.payment === "Pix") {
-
-        paymentBoxContent.innerHTML = `
-            <div class="pix-box">
-
-                <i class="fa-solid fa-bolt"></i>
-
-                <h3>
-                    Pagamento via Pix
-                </h3>
+            pixInfo.innerHTML = `
+                <p><strong>Pagamento via Pix</strong></p>
 
                 <p>
-                    Faça o pagamento usando a chave Pix abaixo.
+                    Chave Pix:
                 </p>
 
                 <div class="pix-key">
                     ${PIX_KEY}
                 </div>
 
-                <button
-                    type="button"
-                    class="copy-pix-button"
-                    id="copy-pix-button"
-                >
-                    <i class="fa-solid fa-copy"></i>
+                <button type="button" id="copy-pix">
                     Copiar chave Pix
                 </button>
+            `;
 
-            </div>
-        `;
+            const newCopyButton =
+                document.getElementById("copy-pix");
 
+            if (newCopyButton) {
 
-        document
-            .getElementById("copy-pix-button")
-            .addEventListener("click", copyPixKey);
+                newCopyButton.addEventListener("click", function() {
 
+                    navigator.clipboard.writeText(PIX_KEY);
+
+                    newCopyButton.textContent =
+                        "Chave copiada!";
+
+                    setTimeout(() => {
+
+                        newCopyButton.textContent =
+                            "Copiar chave Pix";
+
+                    }, 2000);
+                });
+            }
+        }
+
+        if (cashInfo) {
+            cashInfo.style.display = "none";
+        }
 
     } else {
 
-        const total = calculateTotal();
+        if (pixInfo) {
+            pixInfo.style.display = "none";
+        }
 
-        const change =
-            customerData.cashGiven - total;
+        if (cashInfo) {
 
+            cashInfo.style.display = "block";
 
-        paymentBoxContent.innerHTML = `
-            <div class="money-box">
+            const trocoPara = parseFloat(changeInput.value);
 
-                <i class="fa-solid fa-money-bill-wave"></i>
+            const troco = trocoPara - total;
 
-                <h3>
-                    Pagamento em Dinheiro
-                </h3>
-
+            cashInfo.innerHTML = `
                 <p>
-                    Valor entregue:
-                    <strong>
-                        ${formatPrice(customerData.cashGiven)}
-                    </strong>
+                    <strong>Pagamento em dinheiro</strong>
                 </p>
 
                 <p>
-                    Total:
-                    <strong>
-                        ${formatPrice(total)}
-                    </strong>
+                    Troco para:
+                    R$ ${trocoPara.toFixed(2).replace(".", ",")}
                 </p>
 
                 <p>
                     Troco:
                     <strong>
-                        ${formatPrice(change)}
+                        R$ ${Math.max(0, troco).toFixed(2).replace(".", ",")}
                     </strong>
                 </p>
-
-            </div>
-        `;
+            `;
+        }
     }
 }
 
 
-/* ================================
-   COPIAR PIX
-================================ */
+// ===============================
+// VOLTAR PARA DADOS DO PEDIDO
+// ===============================
 
-function copyPixKey() {
+const backButton = document.getElementById("back-button");
 
-    navigator.clipboard.writeText(PIX_KEY);
+if (backButton) {
 
-    showToast("Chave Pix copiada!");
+    backButton.addEventListener("click", function() {
 
+        if (step2) {
+            step2.style.display = "none";
+        }
+
+        if (step1) {
+            step1.style.display = "block";
+        }
+
+    });
 }
 
 
-/* ================================
-   VOLTAR
-================================ */
+// ===============================
+// ENVIAR PEDIDO PELO WHATSAPP
+// ===============================
 
-backButton.addEventListener("click", function() {
+const whatsappButton =
+    document.getElementById("whatsapp-button");
 
-    step2Container.style.display = "none";
+if (whatsappButton) {
 
-    step1Container.style.display = "block";
+    whatsappButton.addEventListener("click", function() {
 
-});
+        // Verifica novamente o horário
+        if (!verificarHorario()) {
 
+            alert(
+                "Estamos fechados no momento! 🍪\n\n" +
+                "Nosso horário de atendimento é de segunda a sábado, das 13h às 21h."
+            );
 
-/* ================================
-   WHATSAPP
-================================ */
+            return;
+        }
 
-whatsappButton.addEventListener("click", function() {
+        if (cart.length === 0) {
 
-    let message =
-        "🍪 *NOVO PEDIDO - MIMI COOKIES*%0A%0A";
+            alert("Seu carrinho está vazio.");
 
+            return;
+        }
 
-    message +=
-        "👤 *Cliente:* " +
-        customerData.name +
-        "%0A%0A";
+        const name = customerName.value.trim();
 
+        const delivery =
+            deliveryOption.value === "entrega"
+                ? "Entrega"
+                : "Retirada";
 
-    message += "*🍪 PEDIDO:*%0A";
+        const address =
+            deliveryOption.value === "entrega"
+                ? addressInput.value.trim()
+                : "Rua Rio Tibre, nº 48, Jardim Figueira";
 
+        const payment =
+            paymentOption.value === "pix"
+                ? "Pix"
+                : "Dinheiro";
 
-    cart.forEach(function(item) {
+        const subtotal = calculateSubtotal();
 
-        const itemTotal =
-            item.price * item.quantity;
+        const deliveryFee =
+            deliveryOption.value === "entrega"
+                ? DELIVERY_FEE
+                : 0;
+
+        const total = subtotal + deliveryFee;
+
+        let message = "";
+
+        message += "🍪 *NOVO PEDIDO - MIMI COOKIES* 🍪\n\n";
+
+        message += `*Nome:* ${name}\n\n`;
+
+        message += "*Pedido:*\n";
+
+        cart.forEach(product => {
+
+            const itemTotal =
+                product.price * product.quantity;
+
+            message +=
+                `• ${product.quantity}x ${product.name} - R$ ${itemTotal.toFixed(2).replace(".", ",")}\n`;
+        });
+
+        message += "\n";
 
         message +=
-            "• " +
-            item.quantity +
-            "x " +
-            item.name +
-            " - " +
-            formatPrice(itemTotal) +
-            "%0A";
+            `*Subtotal:* R$ ${subtotal.toFixed(2).replace(".", ",")}\n`;
+
+        if (deliveryOption.value === "entrega") {
+
+            message +=
+                `*Entrega:* R$ ${DELIVERY_FEE.toFixed(2).replace(".", ",")}\n`;
+
+            message +=
+                `*Endereço:* ${address}\n`;
+
+        } else {
+
+            message += "*Retirada:* Grátis\n";
+
+            message +=
+                `*Local de retirada:* ${address}\n`;
+        }
+
+        message += "\n";
+
+        message +=
+            `*Total:* R$ ${total.toFixed(2).replace(".", ",")}\n`;
+
+        message +=
+            `*Pagamento:* ${payment}\n`;
+
+        if (payment === "Dinheiro") {
+
+            const changeFor =
+                parseFloat(changeInput.value);
+
+            const change =
+                Math.max(0, changeFor - total);
+
+            message +=
+                `*Troco para:* R$ ${changeFor.toFixed(2).replace(".", ",")}\n`;
+
+            message +=
+                `*Troco:* R$ ${change.toFixed(2).replace(".", ",")}\n`;
+        }
+
+        message += "\n";
+
+        message += "Obrigada pelo pedido! 🤍🍪";
+
+        const whatsappURL =
+            `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+        window.open(whatsappURL, "_blank");
     });
+}
 
 
-    const subtotal =
-        calculateSubtotal();
+// ===============================
+// STATUS DE FUNCIONAMENTO
+// ===============================
 
+function mostrarStatusFuncionamento() {
 
-    const deliveryFee =
-        customerData.delivery === "entrega"
-            ? DELIVERY_FEE
-            : 0;
+    const aberto = verificarHorario();
 
+    const statusElement =
+        document.getElementById("status-funcionamento");
 
-    const total =
-        subtotal + deliveryFee;
+    if (!statusElement) {
+        return;
+    }
 
+    if (aberto) {
 
-    message +=
-        "%0A*Subtotal:* " +
-        formatPrice(subtotal) +
-        "%0A";
+        statusElement.textContent =
+            "● Estamos abertos!";
 
+        statusElement.classList.remove("fechado");
 
-    if (customerData.delivery === "entrega") {
-
-        message +=
-            "*Taxa de entrega:* " +
-            formatPrice(DELIVERY_FEE) +
-            "%0A";
-
-        message +=
-            "*Endereço:* " +
-            customerData.address +
-            "%0A";
+        statusElement.classList.add("aberto");
 
     } else {
 
-        message +=
-            "*Forma de envio:* Retirada%0A";
+        statusElement.textContent =
+            "● Estamos fechados";
 
-        message +=
-            "*Local:* Rua Rio Tibre, nº 48, Jardim Figueira%0A";
+        statusElement.classList.remove("aberto");
+
+        statusElement.classList.add("fechado");
     }
-
-
-    message +=
-        "%0A*💰 TOTAL:* " +
-        formatPrice(total) +
-        "%0A";
-
-
-    message +=
-        "*💳 Pagamento:* " +
-        customerData.payment +
-        "%0A";
-
-
-    if (customerData.payment === "Pix") {
-
-        message +=
-            "*Chave Pix:* " +
-            PIX_KEY +
-            "%0A";
-    }
-
-
-    if (customerData.payment === "Dinheiro") {
-
-        const change =
-            customerData.cashGiven - total;
-
-        message +=
-            "*Valor entregue:* " +
-            formatPrice(customerData.cashGiven) +
-            "%0A";
-
-        message +=
-            "*Troco:* " +
-            formatPrice(change) +
-            "%0A";
-    }
-
-
-    message +=
-        "%0A🍪 Obrigada pelo pedido!";
-
-
-    const url =
-        "https://wa.me/" +
-        WHATSAPP_NUMBER +
-        "?text=" +
-        message;
-
-
-    window.open(url, "_blank");
-
-});
-
-
-/* ================================
-   BOTÃO CARRINHO
-================================ */
-
-cartButton.addEventListener("click", function() {
-
-    document.querySelector(".cart-section").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-
-});
-
-
-/* ================================
-   TOAST
-================================ */
-
-let toastTimeout;
-
-
-function showToast(message) {
-
-    toastMessage.textContent = message;
-
-    toast.classList.add("show");
-
-
-    clearTimeout(toastTimeout);
-
-
-    toastTimeout = setTimeout(function() {
-
-        toast.classList.remove("show");
-
-    }, 2500);
-
 }
 
 
-/* ================================
-   INICIAR SITE
-================================ */
+// ===============================
+// INICIAR SITE
+// ===============================
 
 renderProducts();
 
 renderCart();
 
 updateSummary();
+
+mostrarStatusFuncionamento();
+
+
+// Atualiza o status automaticamente
+// a cada 1 minuto
+
+setInterval(() => {
+
+    mostrarStatusFuncionamento();
+
+}, 60000);
