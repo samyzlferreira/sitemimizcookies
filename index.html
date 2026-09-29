@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Mimi Cookies - Pedidos Online</title>
+
+
+    <!-- FONTES -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- FONT AWESOME -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+
+
+    <!-- CSS -->
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ================================
+         CABEÇALHO
+    ================================= -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <div class="logo-box">
+
+                <img
+                    src="foto.jpg"
+                    alt="Logo Mimi Cookies"
+                >
+
+            </div>
+
+
+            <div>
+
+                <h1>
+                    Mimi Cookies
+                </h1>
+
+                <p>
+                    Feito com carinho 🍪🐰
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CARRINHO -->
+
+        <button
+            class="cart-button"
+            id="cart-button"
+            type="button"
+        >
+
+            <i class="fa-solid fa-cookie-bite"></i>
+
+            <span class="cart-text">
+                Carrinho
+            </span>
+
+            <span
+                id="cart-badge-count"
+                class="cart-badge"
+            >
+                0
+            </span>
+
+        </button>
+
+    </header>
+
+
+
+    <!-- ================================
+         CONTEÚDO PRINCIPAL
+    ================================= -->
+
+    <main class="main-container">
+
+
+        <!-- ================================
+             CARDÁPIO
+        ================================= -->
+
+        <section class="products-section">
+
+
+            <div class="section-title">
+
+                <h2>
+
+                    <i class="fa-solid fa-store"></i>
+
+                    Cardápio
+
+                </h2>
+
+
+                <span>
+                    3 sabores disponíveis
+                </span>
+
+            </div>
+
+
+            <!-- OS PRODUTOS SERÃO INSERIDOS PELO JS -->
+
+            <div
+                class="products-grid"
+                id="products-grid"
+            >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================================
+             CARRINHO
+        ================================= -->
+
+        <aside class="cart-section">
+
+            <div class="cart-panel">
+
+
+                <!-- ================================
+                     ETAPA 1
+                ================================= -->
+
+                <div id="step-1-container">
+
+
+                    <!-- TÍTULO -->
+
+                    <div class="cart-title">
+
+                        <h2>
+
+                            <i class="fa-solid fa-basket-shopping"></i>
+
+                            Seu Carrinho
+
+                        </h2>
+
+
+                        <button
+                            id="btn-clear-cart"
+                            class="clear-button"
+                            type="button"
+                        >
+                            Limpar
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- ITENS DO CARRINHO -->
+
+                    <div
+                        id="cart-items-list"
+                        class="cart-items-list"
+                    >
+
+                        <div class="empty-cart">
+
+                            <i class="fa-solid fa-cookie"></i>
+
+                            <p>
+                                Seu carrinho está vazio.
+                            </p>
+
+                            <span>
+                                Adicione alguns cookies gostosos!
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ================================
+                         RESUMO
+                    ================================= -->
+
+                    <div class="summary">
+
+
+                        <div>
+
+                            <span>
+                                Subtotal:
+                            </span>
+
+                            <strong id="summary-subtotal">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Taxa de Entrega:
+                            </span>
+
+                            <strong
+                                id="summary-delivery"
+                                class="delivery-price"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-total">
+
+                            <span>
+                                Total:
+                            </span>
+
+                            <strong id="summary-total">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ================================
+                         FORMULÁRIO
+                    ================================= -->
+
+                    <form id="checkout-form">
+
+
+                        <!-- NOME -->
+
+                        <div class="form-group">
+
+                            <label for="client-name">
+                                Seu Nome *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="client-name"
+                                placeholder="Ex: Maria Oliveira"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- FORMA DE ENVIO -->
+
+                        <div class="form-group">
+
+                            <label for="delivery-option">
+                                Forma de Envio *
+                            </label>
+
+                            <select
+                                id="delivery-option"
+                                required
+                            >
+
+                                <option
+                                    value=""
+                                    selected
+                                    disabled
+                                >
+                                    Escolha uma opção
+                                </option>
+
+                                <option value="entrega">
+                                    🚚 Entrega em Domicílio (+ R$ 8,00)
+                                </option>
+
+                                <option value="retirada">
+                                    🏪 Retirar na Loja (Grátis)
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- ================================
+                             ENDEREÇO
+                        ================================= -->
+
+                        <div
+                            id="address-field-wrapper"
+                            class="form-group"
+                            style="display: none;"
+                        >
+
+                            <label for="client-address">
+                                Endereço Completo *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="client-address"
+                                placeholder="Rua, Nº, Bairro e Ponto de Ref."
+                            >
+
+                        </div>
+
+
+
+                        <!-- ================================
+                             LOCAL DE RETIRADA
+                        ================================= -->
+
+                        <div
+                            id="pickup-info"
+                            class="pickup-info"
+                        >
+
+                            <strong>
+                                📍 Local de retirada
+                            </strong>
+
+                            <p>
+                                Rua Rio Tibre, nº 48, Jardim Figueira
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- ================================
+                             PAGAMENTO
+                        ================================= -->
+
+                        <div class="form-group">
+
+                            <label for="payment-method">
+                                Forma de Pagamento *
+                            </label>
+
+                            <select
+                                id="payment-method"
+                                required
+                            >
+
+                                <option
+                                    value=""
+                                    selected
+                                    disabled
+                                >
+                                    Escolha uma opção
+                                </option>
+
+                                <option value="Pix">
+                                    ⚡ Pix
+                                </option>
+
+                                <option value="Dinheiro">
+                                    💵 Dinheiro
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- ================================
+                             TROCO
+                        ================================= -->
+
+                        <div
+                            id="cash-change-wrapper"
+                            class="cash-change"
+                        >
+
+                            <label for="cash-given">
+                                Precisa de troco para quanto?
+                            </label>
+
+
+                            <div class="cash-input">
+
+                                <span>
+                                    R$
+                                </span>
+
+                                <input
+                                    type="number"
+                                    id="cash-given"
+                                    placeholder="Ex: 50,00"
+                                    min="0"
+                                    step="0.01"
+                                >
+
+                            </div>
+
+
+                            <p id="change-preview-text"></p>
+
+                        </div>
+
+
+
+                        <!-- ================================
+                             BOTÃO
+                        ================================= -->
+
+                        <button
+                            type="submit"
+                            class="continue-button"
+                        >
+
+                            <span>
+                                Avançar para Pagamento
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- ================================
+                     ETAPA 2
+                ================================= -->
+
+                <div
+                    id="step-2-container"
+                    class="payment-step"
+                >
+
+
+                    <!-- TÍTULO -->
+
+                    <div class="payment-title">
+
+                        <h2>
+
+                            <i class="fa-solid fa-credit-card"></i>
+
+                            Pagamento
+
+                        </h2>
+
+                        <span>
+                            Etapa 2/2
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- RESUMO DO PEDIDO -->
+
+                    <div class="order-summary">
+
+
+                        <p>
+
+                            <strong>
+                                Cliente:
+                            </strong>
+
+                            <span id="summary-client-name">
+                                -
+                            </span>
+
+                        </p>
+
+
+                        <p>
+
+                            <strong>
+                                Envio:
+                            </strong>
+
+                            <span id="summary-delivery-type">
+                                -
+                            </span>
+
+                        </p>
+
+
+                        <p id="summary-address-line">
+
+                            <strong>
+                                Endereço:
+                            </strong>
+
+                            <span id="summary-address-val">
+                                -
+                            </span>
+
+                        </p>
+
+
+                        <p class="final-total">
+
+                            Total do Pedido:
+
+                            <strong id="summary-final-total">
+                                R$ 0,00
+                            </strong>
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- PAGAMENTO -->
+
+                    <div id="payment-box-content">
+
+                    </div>
+
+
+
+                    <!-- WHATSAPP -->
+
+                    <button
+                        id="whatsapp-button"
+                        class="whatsapp-button"
+                        type="button"
+                    >
+
+                        <i class="fa-brands fa-whatsapp"></i>
+
+                        Enviar Pedido no WhatsApp
+
+                    </button>
+
+
+
+                    <!-- VOLTAR -->
+
+                    <button
+                        id="back-button"
+                        class="back-button"
+                        type="button"
+                    >
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                        Voltar e alterar dados do pedido
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+
+    <!-- ================================
+         RODAPÉ
+    ================================= -->
+
+    <footer class="footer">
+
+        <p>
+
+            <strong>
+                Mimi Cookies 🍪
+            </strong>
+
+            - Delícias Artesanais
+
+        </p>
+
+
+        <p>
+
+            Chave Pix:
+
+            <span>
+                samyraleitedasilvaferreira09@gmail.com
+            </span>
+
+        </p>
+
+
+        <p>
+            © 2026 Mimi Cookies. Todos os direitos reservados.
+        </p>
+
+    </footer>
+
+
+
+    <!-- ================================
+         NOTIFICAÇÃO
+    ================================= -->
+
+    <div
+        id="toast"
+        class="toast"
+    >
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        <span id="toast-message">
+            Notificação
+        </span>
+
+    </div>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
